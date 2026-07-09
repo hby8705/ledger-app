@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useLedgerStore } from '../store/useLedgerStore';
+import { useI18n } from '../i18n/useI18n';
 import type { CurrencyPref } from '../store/types';
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 export default function AddRecord({ onTabChange }: Props) {
   const store = useLedgerStore();
   const { preferences, categories, currencies, creditCards, addRecord, updateCurrencyPref } = store;
+  const { t } = useI18n();
 
   // 当前币种
   const [currency, setCurrency] = useState(() => preferences?.defaultCurrency || 'CNY');
@@ -96,7 +98,7 @@ export default function AddRecord({ onTabChange }: Props) {
         justifyContent: 'space-between',
         borderBottom: '1px solid var(--color-border)',
       }}>
-        <span style={{ fontSize: 'var(--font-size-lg)', fontWeight: 600 }}>记账</span>
+        <span style={{ fontSize: 'var(--font-size-lg)', fontWeight: 600 }}>{t('记账')}</span>
         <button
           onClick={() => onTabChange('history')}
           style={{
@@ -105,11 +107,11 @@ export default function AddRecord({ onTabChange }: Props) {
             padding: '4px 12px',
           }}
         >
-          历史记录
+          {t('历史记录')}
         </button>
       </div>
 
-      <div className="scroll-container" style={{ padding: '12px 16px', paddingBottom: 'calc(var(--safe-area-bottom) + 80px)' }}>
+      <div className="scroll-container" style={{ padding: '10px 12px', paddingBottom: 'calc(var(--safe-area-bottom) + 80px)' }}>
         {/* 支出/收入 + 币种 */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center' }}>
           <div style={{ display: 'flex', borderRadius: 8, overflow: 'hidden', flex: 1, background: 'var(--color-bg)' }}>
@@ -135,7 +137,7 @@ export default function AddRecord({ onTabChange }: Props) {
                 borderRadius: 8,
               }}
             >
-              收入
+              {t('收入')}
             </button>
           </div>
 
@@ -185,14 +187,14 @@ export default function AddRecord({ onTabChange }: Props) {
             className={`chip ${paymentMethod === 'cash' ? 'chip-selected' : 'chip-unselected'}`}
             style={{ flex: 1, justifyContent: 'center', padding: '10px 0', fontSize: 14 }}
           >
-            现金
+            {t('现金')}
           </button>
           <button
             onClick={() => setPaymentMethod('credit')}
             className={`chip ${paymentMethod === 'credit' ? 'chip-selected' : 'chip-unselected'}`}
             style={{ flex: 1, justifyContent: 'center', padding: '10px 0', fontSize: 14 }}
           >
-            信用卡
+            {t('信用卡')}
           </button>
         </div>
 
@@ -207,7 +209,7 @@ export default function AddRecord({ onTabChange }: Props) {
                 background: 'var(--color-bg)', border: '1px solid var(--color-border)',
               }}
             >
-              {currencyCards.length === 0 && <option value="">请先配置信用卡</option>}
+              {currencyCards.length === 0 && <option value="">{t('请先配置信用卡')}</option>}
               {currencyCards.map(c => (
                 <option key={c.id} value={c.name}>{c.name}</option>
               ))}
@@ -221,7 +223,7 @@ export default function AddRecord({ onTabChange }: Props) {
                   color: billingPeriod === 'current' ? '#fff' : 'var(--color-text-secondary)',
                 }}
               >
-                本期
+                {t('本期')}
               </button>
               <button
                 onClick={() => setBillingPeriod('next')}
@@ -231,7 +233,7 @@ export default function AddRecord({ onTabChange }: Props) {
                   color: billingPeriod === 'next' ? '#fff' : 'var(--color-text-secondary)',
                 }}
               >
-                下期
+                {t('下期')}
               </button>
             </div>
           </div>
@@ -254,7 +256,7 @@ export default function AddRecord({ onTabChange }: Props) {
         <div style={{ marginBottom: 16 }}>
           <input
             type="text"
-            placeholder="添加备注（可选）"
+            placeholder={t('添加备注')}
             value={note}
             onChange={e => setNote(e.target.value)}
             style={{
@@ -267,24 +269,26 @@ export default function AddRecord({ onTabChange }: Props) {
         {/* 分类选择 - 文字网格 */}
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 13, color: 'var(--color-text-secondary)', marginBottom: 8, fontWeight: 500 }}>
-            选择分类
+            {t('选择分类')}
           </div>
           <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6,
+            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6,
           }}>
             {expenseCats.map(cat => (
               <button
                 key={cat.id}
                 onClick={() => setCategory(cat.name)}
                 style={{
-                  padding: '10px 4px', borderRadius: 8, fontSize: 12,
-                  textAlign: 'center', fontWeight: 500, wordBreak: 'keep-all',
+                  padding: '14px 4px', borderRadius: 8, fontSize: 13,
+                  minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  textAlign: 'center', fontWeight: 500,
+                  lineHeight: 1.2, wordBreak: 'break-all',
                   background: category === cat.name ? 'var(--color-primary)' : 'var(--color-bg)',
                   color: category === cat.name ? '#fff' : 'var(--color-text)',
                   border: category === cat.name ? 'none' : '1px solid var(--color-border)',
                 }}
               >
-                {cat.name}
+                {t(cat.name)}
               </button>
             ))}
           </div>
@@ -302,7 +306,7 @@ export default function AddRecord({ onTabChange }: Props) {
             transition: 'all 0.2s',
           }}
         >
-          保存
+          {t('保存')}
         </button>
       </div>
     </div>

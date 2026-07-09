@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useLedgerStore } from '../store/useLedgerStore';
+import { useI18n } from '../i18n/useI18n';
 import type { CreditCard, Category, Currency } from '../store/types';
-import { calcCardStats } from '../utils/creditCardCalc';
 
 type SettingsTab = 'category' | 'currency' | 'creditcard';
 
 export default function Settings() {
   const store = useLedgerStore();
   const {
-    categories, creditCards, currencies, records,
+    categories, creditCards, currencies, records, preferences,
     addCategory, updateCategory, deleteCategory, addCurrency, deleteCurrency,
     addCreditCard, updateCreditCard, deleteCreditCard,
-    confirmRepayment, loadCreditCards, loadRecords,
+    confirmRepayment, loadCreditCards, loadRecords, updatePreferences,
   } = store;
+  const { t } = useI18n();
 
   const [tab, setTab] = useState<SettingsTab>('category');
 
@@ -89,7 +90,26 @@ export default function Settings() {
         borderBottom: '1px solid var(--color-border)',
         fontSize: 'var(--font-size-lg)', fontWeight: 600,
       }}>
-        设置
+        {t('设置')}
+      </div>
+
+      {/* 语言切换 */}
+      <div style={{ padding: '10px 16px', background: 'var(--color-surface)', borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ fontSize: 14, color: 'var(--color-text-secondary)' }}>{t('语言')}:</span>
+        <button
+          onClick={() => updatePreferences({ language: 'zh-CN' })}
+          className={`chip ${preferences?.language !== 'zh-TW' ? 'chip-selected' : 'chip-unselected'}`}
+          style={{ padding: '6px 14px', fontSize: 13 }}
+        >
+          {t('简体中文')}
+        </button>
+        <button
+          onClick={() => updatePreferences({ language: 'zh-TW' })}
+          className={`chip ${preferences?.language === 'zh-TW' ? 'chip-selected' : 'chip-unselected'}`}
+          style={{ padding: '6px 14px', fontSize: 13 }}
+        >
+          {t('繁体中文')}
+        </button>
       </div>
 
       {/* 子Tab */}
@@ -98,9 +118,9 @@ export default function Settings() {
         borderBottom: '1px solid var(--color-border)',
       }}>
         {([
-          ['category', '类别管理'],
-          ['currency', '币种管理'],
-          ['creditcard', '信用卡'],
+          ['category', t('类别管理')],
+          ['currency', t('币种管理')],
+          ['creditcard', t('信用卡')],
         ] as [SettingsTab, string][]).map(([key, label]) => (
           <button
             key={key}
@@ -124,7 +144,7 @@ export default function Settings() {
             <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
               <input
                 type="text"
-                placeholder="新类别名称"
+                placeholder={t('新类别名称')}
                 value={newCatName}
                 onChange={e => setNewCatName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleAddCategory()}
@@ -140,7 +160,7 @@ export default function Settings() {
                   background: 'var(--color-primary)', color: '#fff', whiteSpace: 'nowrap',
                 }}
               >
-                新增
+                {t('新增')}
               </button>
             </div>
 
@@ -183,7 +203,7 @@ export default function Settings() {
                         background: 'var(--color-success)', color: '#fff', whiteSpace: 'nowrap',
                       }}
                     >
-                      保存
+                      {t('保存')}
                     </button>
                     <button
                       onClick={() => setEditingCatId(null)}
@@ -192,7 +212,7 @@ export default function Settings() {
                         background: 'var(--color-bg)', color: 'var(--color-text-secondary)',
                       }}
                     >
-                      取消
+                      {t('取消')}
                     </button>
                   </>
                 ) : (
@@ -205,11 +225,11 @@ export default function Settings() {
                         background: 'var(--color-primary-light)', color: 'var(--color-primary)',
                       }}
                     >
-                      编辑
+                      {t('编辑')}
                     </button>
                     <button
                       onClick={() => {
-                        if (window.confirm(`确定删除分类「${cat.name}」？`)) {
+                        if (window.confirm(`${t('确定删除分类')}「${cat.name}」？`)) {
                           deleteCategory(cat.id!);
                         }
                       }}
@@ -218,7 +238,7 @@ export default function Settings() {
                         background: 'var(--color-danger-light)', color: 'var(--color-danger)',
                       }}
                     >
-                      删除
+                      {t('删除')}
                     </button>
                   </>
                 )}
@@ -233,7 +253,7 @@ export default function Settings() {
             <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
               <input
                 type="text"
-                placeholder="代码 (如 USD)"
+                placeholder={t('代码')}
                 value={newCurCode}
                 onChange={e => setNewCurCode(e.target.value)}
                 style={{
@@ -245,7 +265,7 @@ export default function Settings() {
               <div style={{ display: 'flex', gap: 8, width: '100%' }}>
                 <input
                   type="text"
-                  placeholder="符号 (如 $)"
+                  placeholder={t('符号')}
                   value={newCurSymbol}
                   onChange={e => setNewCurSymbol(e.target.value)}
                   style={{
@@ -255,7 +275,7 @@ export default function Settings() {
                 />
                 <input
                   type="text"
-                  placeholder="名称 (如 美元)"
+                  placeholder={t('名称')}
                   value={newCurName}
                   onChange={e => setNewCurName(e.target.value)}
                   style={{
@@ -271,7 +291,7 @@ export default function Settings() {
                   background: 'var(--color-primary)', color: '#fff',
                 }}
               >
-                新增币种
+                {t('新增币种')}
               </button>
             </div>
 
@@ -289,7 +309,7 @@ export default function Settings() {
                   <span style={{ fontSize: 12, color: 'var(--color-text-hint)', marginLeft: 8 }}>({cur.code})</span>
                 </div>
                 {cur.isPreset ? (
-                  <span style={{ fontSize: 11, color: 'var(--color-text-hint)' }}>预设</span>
+                  <span style={{ fontSize: 11, color: 'var(--color-text-hint)' }}>{t('预设')}</span>
                 ) : (
                   <button
                     onClick={() => deleteCurrency(cur.id!)}
@@ -320,7 +340,7 @@ export default function Settings() {
                 background: 'var(--color-primary)', color: '#fff', marginBottom: 16,
               }}
             >
-              + 新增信用卡
+              + {t('新增信用卡')}
             </button>
 
             {creditCards.map(card => (
@@ -339,10 +359,10 @@ export default function Settings() {
                 </div>
 
                 <div style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.8 }}>
-                  <div>总额度: {card.totalLimit.toLocaleString()}</div>
-                  <div>期初已用: {card.beginningUsed.toLocaleString()}</div>
-                  <div>账单结算日: 每月{card.statementDate}日</div>
-                  <div>剩余额度: {(card.totalLimit - card.beginningUsed).toLocaleString()}</div>
+                  <div>{t('总额度')}: {card.totalLimit.toLocaleString()}</div>
+                  <div>{t('期初已用额度')}: {card.beginningUsed.toLocaleString()}</div>
+                  <div>{t('账单结算日')}: {t('每月')}{card.statementDate}{t('日')}</div>
+                  <div>{t('剩余额度')}: {(card.totalLimit - card.beginningUsed).toLocaleString()}</div>
                 </div>
 
                 <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
@@ -353,7 +373,7 @@ export default function Settings() {
                       background: 'var(--color-primary-light)', color: 'var(--color-primary)',
                     }}
                   >
-                    编辑
+                    {t('编辑')}
                   </button>
                   {!['HSBC', 'HN', '招商银行'].includes(card.name) && (
                     <button
@@ -363,7 +383,7 @@ export default function Settings() {
                         background: 'var(--color-danger-light)', color: 'var(--color-danger)',
                       }}
                     >
-                      删除
+                      {t('删除')}
                     </button>
                   )}
                   <button
@@ -373,7 +393,7 @@ export default function Settings() {
                       background: 'var(--color-warning)', color: '#fff',
                     }}
                   >
-                    确认已还款
+                    {t('确认已还款')}
                   </button>
                 </div>
 
@@ -384,8 +404,8 @@ export default function Settings() {
                     borderRadius: 8, fontSize: 13,
                   }}>
                     <div style={{ marginBottom: 8, fontWeight: 500 }}>
-                      确认已还清 {card.name} 本期账单？
-                      <br />本期消费将清零，下期消费转入新本期。
+                      {t('确认已还清')} {card.name} {t('本期账单？')}
+                      <br />{t('本期消费将清零，下期消费转入新本期。')}
                     </div>
                     <div style={{ display: 'flex', gap: 8 }}>
                       <button
@@ -395,7 +415,7 @@ export default function Settings() {
                           background: 'var(--color-bg)',
                         }}
                       >
-                        取消
+                        {t('取消')}
                       </button>
                       <button
                         onClick={() => handleRepay(card.id!)}
@@ -404,7 +424,7 @@ export default function Settings() {
                           background: 'var(--color-success)', color: '#fff',
                         }}
                       >
-                        确认还款
+                        {t('确认还款')}
                       </button>
                     </div>
                   </div>
@@ -425,11 +445,11 @@ export default function Settings() {
                   width: '100%', maxWidth: 380,
                 }} onClick={e => e.stopPropagation()}>
                   <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 16 }}>
-                    {editingCard ? '编辑信用卡' : '新增信用卡'}
+                    {editingCard ? t('编辑信用卡') : t('新增信用卡')}
                   </div>
 
                   <div style={{ marginBottom: 10 }}>
-                    <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>卡名称</label>
+                    <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>{t('卡名称')}</label>
                     <input
                       type="text"
                       value={cardForm.name || ''}
@@ -443,7 +463,7 @@ export default function Settings() {
                   </div>
 
                   <div style={{ marginBottom: 10 }}>
-                    <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>币种</label>
+                    <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>{t('币种')}</label>
                     <select
                       value={cardForm.currency || ''}
                       onChange={e => setCardForm({ ...cardForm, currency: e.target.value })}
@@ -460,7 +480,7 @@ export default function Settings() {
                   </div>
 
                   <div style={{ marginBottom: 10 }}>
-                    <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>总额度</label>
+                    <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>{t('总额度')}</label>
                     <input
                       type="number"
                       value={cardForm.totalLimit || ''}
@@ -474,7 +494,7 @@ export default function Settings() {
                   </div>
 
                   <div style={{ marginBottom: 10 }}>
-                    <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>期初已用额度</label>
+                    <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>{t('期初已用额度')}</label>
                     <input
                       type="number"
                       value={cardForm.beginningUsed || ''}
@@ -488,7 +508,7 @@ export default function Settings() {
                   </div>
 
                   <div style={{ marginBottom: 16 }}>
-                    <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>账单结算日 (每月几日)</label>
+                    <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>{t('账单结算日')}</label>
                     <select
                       value={cardForm.statementDate || 1}
                       onChange={e => setCardForm({ ...cardForm, statementDate: Number(e.target.value) })}
@@ -499,7 +519,7 @@ export default function Settings() {
                       }}
                     >
                       {Array.from({ length: 28 }, (_, i) => i + 1).map(d => (
-                        <option key={d} value={d}>每月{d}日</option>
+                        <option key={d} value={d}>{t('每月')}{d}{t('日')}</option>
                       ))}
                     </select>
                   </div>
@@ -512,7 +532,7 @@ export default function Settings() {
                         background: 'var(--color-bg)', color: 'var(--color-text-secondary)',
                       }}
                     >
-                      取消
+                      {t('取消')}
                     </button>
                     <button
                       onClick={handleSaveCard}
@@ -521,7 +541,7 @@ export default function Settings() {
                         background: 'var(--color-primary)', color: '#fff',
                       }}
                     >
-                      保存
+                      {t('保存')}
                     </button>
                   </div>
                 </div>

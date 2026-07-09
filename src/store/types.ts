@@ -49,6 +49,7 @@ export interface CurrencyPref {
 
 export interface UserPreferences {
   id?: number;
+  language: 'zh-CN' | 'zh-TW';
   defaultCurrency: string;
   currencyPrefs: Record<string, CurrencyPref>;
 }

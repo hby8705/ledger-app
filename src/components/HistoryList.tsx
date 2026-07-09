@@ -1,10 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useLedgerStore } from '../store/useLedgerStore';
+import { useI18n } from '../i18n/useI18n';
 import type { Transaction } from '../store/types';
 
 export default function HistoryList() {
   const store = useLedgerStore();
   const { records, categories, currencies, loadRecords, updateRecord, deleteRecord } = store;
+  const { t } = useI18n();
 
   useEffect(() => { loadRecords(); }, [loadRecords]);
 
@@ -66,7 +68,7 @@ export default function HistoryList() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('确定删除这条记录吗？')) {
+    if (window.confirm(t('确定删除这条记录吗？'))) {
       await deleteRecord(id);
     }
   };
@@ -82,14 +84,14 @@ export default function HistoryList() {
         borderBottom: '1px solid var(--color-border)',
         fontSize: 'var(--font-size-lg)', fontWeight: 600,
       }}>
-        历史账单
+        {t('历史账单')}
       </div>
 
       <div className="scroll-container" style={{ padding: '12px 16px', paddingBottom: 'calc(var(--safe-area-bottom) + 80px)' }}>
         {/* 搜索框 */}
         <input
           type="text"
-          placeholder="搜索类别、备注、币种..."
+          placeholder={t('搜索类别、备注、币种...')}
           value={searchText}
           onChange={e => setSearchText(e.target.value)}
           style={{
@@ -109,8 +111,8 @@ export default function HistoryList() {
               background: 'var(--color-bg)', border: '1px solid var(--color-border)',
             }}
           >
-            <option value="">全部年份</option>
-            {years.map(y => <option key={y} value={y}>{y}年</option>)}
+            <option value="">{t('全部年份')}</option>
+            {years.map(y => <option key={y} value={y}>{y}{t('年')}</option>)}
           </select>
           {filterYear && (
             <select
@@ -121,9 +123,9 @@ export default function HistoryList() {
                 background: 'var(--color-bg)', border: '1px solid var(--color-border)',
               }}
             >
-              <option value="">全部月份</option>
+              <option value="">{t('全部月份')}</option>
               {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
-                <option key={m} value={m}>{m}月</option>
+                <option key={m} value={m}>{m}{t('月')}</option>
               ))}
             </select>
           )}
@@ -135,7 +137,7 @@ export default function HistoryList() {
               background: 'var(--color-bg)', border: '1px solid var(--color-border)',
             }}
           >
-            <option value="">全部分类</option>
+            <option value="">{t('全部分类')}</option>
             {categories.map(c => (
               <option key={c.id} value={c.name}>{c.name}</option>
             ))}
@@ -145,7 +147,7 @@ export default function HistoryList() {
         {/* 记录列表 */}
         {groupedRecords.length === 0 ? (
           <div className="empty-state" style={{ padding: 40 }}>
-            <div style={{ fontSize: 14 }}>暂无记录</div>
+            <div style={{ fontSize: 14 }}>{t('暂无记录')}</div>
           </div>
         ) : (
           groupedRecords.map(([monthLabel, items]) => (
@@ -172,7 +174,7 @@ export default function HistoryList() {
                     padding: '4px 10px', borderRadius: 12, fontSize: 12, fontWeight: 600,
                     whiteSpace: 'nowrap',
                   }}>
-                    {r.category}
+                    {t(r.category)}
                   </div>
 
                   {/* 详情 */}
@@ -184,7 +186,7 @@ export default function HistoryList() {
                       <span style={{ fontSize: 11, color: 'var(--color-text-hint)' }}>{r.date.slice(5)}</span>
                     </div>
                     <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 2 }}>
-                      {r.paymentMethod === 'cash' ? '现金' : `💳 ${r.creditCard || ''} · ${r.billingPeriod === 'current' ? '本期' : '下期'}`}
+                      {r.paymentMethod === 'cash' ? t('现金') : `💳 ${r.creditCard || ''} · ${r.billingPeriod === 'current' ? t('本期') : t('下期')}`}
                       {r.note && <span style={{ marginLeft: 6, color: 'var(--color-text-hint)' }}>{r.note}</span>}
                     </div>
                   </div>
@@ -198,7 +200,7 @@ export default function HistoryList() {
                         background: 'var(--color-primary-light)', color: 'var(--color-primary)',
                       }}
                     >
-                      编辑
+                      {t('编辑')}
                     </button>
                     <button
                       onClick={() => handleDelete(r.id!)}
@@ -207,7 +209,7 @@ export default function HistoryList() {
                         background: 'var(--color-danger-light)', color: 'var(--color-danger)',
                       }}
                     >
-                      删除
+                      {t('删除')}
                     </button>
                   </div>
                 </div>
@@ -230,10 +232,10 @@ export default function HistoryList() {
               background: 'var(--color-surface)', borderRadius: 16, padding: 20,
               width: '100%', maxWidth: 380,
             }} onClick={e => e.stopPropagation()}>
-              <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 16 }}>编辑记录</div>
+              <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 16 }}>{t('编辑记录')}</div>
 
               <div style={{ marginBottom: 12 }}>
-                <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>金额</label>
+                <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>{t('金额')}</label>
                 <input
                   type="number"
                   value={editForm.amount || ''}
@@ -246,7 +248,7 @@ export default function HistoryList() {
               </div>
 
               <div style={{ marginBottom: 12 }}>
-                <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>分类</label>
+                <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>{t('分类')}</label>
                 <select
                   value={editForm.category || ''}
                   onChange={e => setEditForm({ ...editForm, category: e.target.value })}
@@ -256,13 +258,13 @@ export default function HistoryList() {
                   }}
                 >
                   {categories.map(c => (
-                    <option key={c.id} value={c.name}>{c.name}</option>
+                    <option key={c.id} value={c.name}>{t(c.name)}</option>
                   ))}
                 </select>
               </div>
 
               <div style={{ marginBottom: 12 }}>
-                <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>日期</label>
+                <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>{t('日期')}</label>
                 <input
                   type="date"
                   value={editForm.date || ''}
@@ -275,7 +277,7 @@ export default function HistoryList() {
               </div>
 
               <div style={{ marginBottom: 16 }}>
-                <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>备注</label>
+                <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>{t('备注')}</label>
                 <input
                   type="text"
                   value={editForm.note || ''}
@@ -295,7 +297,7 @@ export default function HistoryList() {
                     background: 'var(--color-bg)', color: 'var(--color-text-secondary)',
                   }}
                 >
-                  取消
+                  {t('取消')}
                 </button>
                 <button
                   onClick={handleSaveEdit}
@@ -304,7 +306,7 @@ export default function HistoryList() {
                     background: 'var(--color-primary)', color: '#fff',
                   }}
                 >
-                  保存
+                  {t('保存')}
                 </button>
               </div>
             </div>

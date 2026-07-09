@@ -110,7 +110,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .scroll-container {
   flex: 1;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: visible;
   -webkit-overflow-scrolling: touch;
   padding-bottom: calc(var(--safe-area-bottom) + 60px);
 }

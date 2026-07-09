@@ -53,12 +53,19 @@ export async function initPresetData(): Promise<void> {
       const prefCount = await db.preferences.count();
       if (prefCount === 0) {
         await db.preferences.add({
+          language: 'zh-CN',
           defaultCurrency: 'CNY',
           currencyPrefs: {
             CNY: { lastPaymentMethod: 'credit', lastCreditCard: '招商银行' },
             TWD: { lastPaymentMethod: 'credit', lastCreditCard: 'HSBC' },
           },
         });
+      } else {
+        // 给旧用户补上 language 字段
+        const pref = await db.preferences.toCollection().first();
+        if (pref && !pref.language) {
+          await db.preferences.update(pref.id!, { language: 'zh-CN' });
+        }
       }
     });
   })();
