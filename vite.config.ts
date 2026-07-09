@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => ({
         background_color: '#f5f5f5',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/ledger-app/',
+        start_url: '/ledger-app/?v=2',
         scope: '/ledger-app/',
         icons: [
           {
