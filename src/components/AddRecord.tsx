@@ -157,27 +157,41 @@ export default function AddRecord({ onTabChange }: Props) {
           </select>
         </div>
 
-        {/* 金额输入 */}
-        <div style={{
-          marginBottom: 12, display: 'flex', alignItems: 'center',
-          background: 'var(--color-surface)', borderRadius: 12, padding: '8px 16px',
-          border: '2px solid var(--color-border)',
-        }}>
-          <span style={{ fontSize: 28, fontWeight: 300, color: 'var(--color-text-hint)', marginRight: 8 }}>
-            {currentCurrency?.symbol || '¥'}
-          </span>
-          <input
-            type="number"
-            inputMode="decimal"
-            placeholder="0.00"
-            value={amount}
-            onChange={e => setAmount(e.target.value)}
-            autoFocus
+        {/* 金额输入 + 保存 */}
+        <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'stretch' }}>
+          <div style={{
+            flex: 3, display: 'flex', alignItems: 'center',
+            background: 'var(--color-surface)', borderRadius: 12, padding: '4px 12px',
+            border: '2px solid var(--color-border)',
+          }}>
+            <span style={{ fontSize: 22, fontWeight: 300, color: 'var(--color-text-hint)', marginRight: 6 }}>
+              {currentCurrency?.symbol || '¥'}
+            </span>
+            <input
+              type="number"
+              inputMode="decimal"
+              placeholder="0.00"
+              value={amount}
+              onChange={e => setAmount(e.target.value)}
+              autoFocus
+              style={{
+                flex: 1, fontSize: 26, fontWeight: 500, padding: '6px 0',
+                color: recordType === 'expense' ? 'var(--color-danger)' : 'var(--color-success)',
+                minWidth: 0,
+              }}
+            />
+          </div>
+          <button
+            onClick={handleSave}
+            disabled={!amount || !category}
             style={{
-              flex: 1, fontSize: 32, fontWeight: 500, padding: '8px 0',
-              color: recordType === 'expense' ? 'var(--color-danger)' : 'var(--color-success)',
+              flex: 1, borderRadius: 12, fontSize: 16, fontWeight: 600,
+              background: amount && category ? 'var(--color-primary)' : 'var(--color-border)',
+              color: amount && category ? '#fff' : 'var(--color-text-hint)',
             }}
-          />
+          >
+            {t('保存')}
+          </button>
         </div>
 
         {/* 支付方式 */}
@@ -239,29 +253,27 @@ export default function AddRecord({ onTabChange }: Props) {
           </div>
         )}
 
-        {/* 日期 */}
-        <div style={{ marginBottom: 8 }}>
+        {/* 日期 + 备注 */}
+        <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
           <input
             type="date"
             value={date}
             onChange={e => setDate(e.target.value)}
             style={{
-              width: '100%', padding: '10px 12px', borderRadius: 8, fontSize: 14,
+              flex: 2, padding: '10px 8px', borderRadius: 8, fontSize: 14,
               background: 'var(--color-bg)', border: '1px solid var(--color-border)',
+              minWidth: 0,
             }}
           />
-        </div>
-
-        {/* 备注 */}
-        <div style={{ marginBottom: 16 }}>
           <input
             type="text"
             placeholder={t('添加备注')}
             value={note}
             onChange={e => setNote(e.target.value)}
             style={{
-              width: '100%', padding: '10px 12px', borderRadius: 8, fontSize: 14,
+              flex: 3, padding: '10px 8px', borderRadius: 8, fontSize: 14,
               background: 'var(--color-bg)', border: '1px solid var(--color-border)',
+              minWidth: 0,
             }}
           />
         </div>
@@ -294,20 +306,6 @@ export default function AddRecord({ onTabChange }: Props) {
           </div>
         </div>
 
-        {/* 保存按钮 */}
-        <button
-          onClick={handleSave}
-          disabled={!amount || !category}
-          style={{
-            width: '100%', padding: '14px 0', borderRadius: 12,
-            fontSize: 18, fontWeight: 600, textAlign: 'center',
-            background: amount && category ? 'var(--color-primary)' : 'var(--color-border)',
-            color: amount && category ? '#fff' : 'var(--color-text-hint)',
-            transition: 'all 0.2s',
-          }}
-        >
-          {t('保存')}
-        </button>
       </div>
     </div>
   );

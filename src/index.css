@@ -75,7 +75,7 @@ html, body {
   flex-direction: column;
   background: var(--color-surface);
   position: relative;
-  box-shadow: 0 0 40px rgba(0,0,0,0.08);
+  overflow: hidden;
 }
 
 input, select, textarea, button {
@@ -110,7 +110,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .scroll-container {
   flex: 1;
   overflow-y: auto;
-  overflow-x: visible;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   padding-bottom: calc(var(--safe-area-bottom) + 60px);
 }
@@ -194,10 +194,12 @@ input[type="number"]::-webkit-inner-spin-button {
 
 /* 页面容器 */
 .page {
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   padding-top: var(--safe-area-top);
+  overflow-x: hidden;
 }
 
 .page-header {
