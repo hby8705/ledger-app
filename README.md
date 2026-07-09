@@ -1,13 +1,14 @@
-# React + TypeScript + Vite
+# 记账本
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+个人记账 App — 多币种 · 信用卡管理 · 月度统计 · PWA 离线可用
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
+## 功能
+- 多币种记账（预设人民币/新台币，可自定义）
+- 现金 + 信用卡双支付方式
+- 信用卡额度管理 + 本期/下期归属 + 还款结转
+- 月度按币种/类别/卡别统计
+- 历史账单搜索筛选编辑
+- PWA 支持，可安装到手机离线使用
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
