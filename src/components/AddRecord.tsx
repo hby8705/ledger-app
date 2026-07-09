@@ -157,10 +157,10 @@ export default function AddRecord({ onTabChange }: Props) {
           </select>
         </div>
 
-        {/* 金额输入 + 保存 */}
-        <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'stretch' }}>
+        {/* 金额输入 */}
+        <div style={{ marginBottom: 12 }}>
           <div style={{
-            flex: 1, display: 'flex', alignItems: 'center',
+            display: 'flex', alignItems: 'center',
             background: 'var(--color-surface)', borderRadius: 12, padding: '4px 12px',
             border: '2px solid var(--color-border)',
           }}>
@@ -181,17 +181,6 @@ export default function AddRecord({ onTabChange }: Props) {
               }}
             />
           </div>
-          <button
-            onClick={handleSave}
-            disabled={!amount || !category}
-            style={{
-              flex: 1, borderRadius: 12, fontSize: 16, fontWeight: 600,
-              background: amount && category ? 'var(--color-primary)' : 'var(--color-border)',
-              color: amount && category ? '#fff' : 'var(--color-text-hint)',
-            }}
-          >
-            {t('保存')}
-          </button>
         </div>
 
         {/* 支付方式 */}
@@ -284,7 +273,7 @@ export default function AddRecord({ onTabChange }: Props) {
             {t('选择分类')}
           </div>
           <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6,
+            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6,
           }}>
             {expenseCats.map(cat => (
               <button
@@ -305,6 +294,20 @@ export default function AddRecord({ onTabChange }: Props) {
             ))}
           </div>
         </div>
+
+        {/* 保存按钮 */}
+        <button
+          onClick={handleSave}
+          disabled={!amount || !category}
+          style={{
+            width: '100%', borderRadius: 12, fontSize: 16, fontWeight: 600,
+            padding: '14px 0',
+            background: amount && category ? 'var(--color-primary)' : 'var(--color-border)',
+            color: amount && category ? '#fff' : 'var(--color-text-hint)',
+          }}
+        >
+          {t('保存')}
+        </button>
 
       </div>
     </div>
