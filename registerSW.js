@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/ledger-app/sw.js', { scope: '/ledger-app/' })})}
