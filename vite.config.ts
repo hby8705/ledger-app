@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig(({ mode }) => ({
-  base: mode === 'production' ? './' : '/',
+  base: mode === 'production' ? '/ledger-app/' : '/',
   plugins: [
     react(),
     VitePWA({
@@ -17,15 +17,16 @@ export default defineConfig(({ mode }) => ({
         background_color: '#f5f5f5',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        start_url: '/ledger-app/',
+        scope: '/ledger-app/',
         icons: [
           {
-            src: '/favicon.svg',
+            src: '/ledger-app/favicon.svg',
             sizes: '192x192',
             type: 'image/svg+xml',
           },
           {
-            src: '/favicon.svg',
+            src: '/ledger-app/favicon.svg',
             sizes: '512x512',
             type: 'image/svg+xml',
           },
