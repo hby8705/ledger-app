@@ -58,7 +58,7 @@ html, body {
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   font-size: 16px;
   color: var(--color-text);
-  background: var(--color-bg);
+  background: #e8e8e8;
   height: 100%;
   overflow: hidden;
   user-select: none;
@@ -68,12 +68,14 @@ html, body {
 
 #root {
   height: 100%;
+  width: 100%;
   max-width: 480px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg);
+  background: var(--color-surface);
   position: relative;
+  box-shadow: 0 0 40px rgba(0,0,0,0.08);
 }
 
 input, select, textarea, button {
