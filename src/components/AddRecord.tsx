@@ -160,7 +160,7 @@ export default function AddRecord({ onTabChange }: Props) {
         {/* 金额输入 + 保存 */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'stretch' }}>
           <div style={{
-            flex: 3, display: 'flex', alignItems: 'center',
+            flex: 1, display: 'flex', alignItems: 'center',
             background: 'var(--color-surface)', borderRadius: 12, padding: '4px 12px',
             border: '2px solid var(--color-border)',
           }}>
